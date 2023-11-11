@@ -28,3 +28,13 @@ blue_btn.addEventListener('click', function() {
     audio.play()
 })
 
+let win = true
+let colors = ['green', 'red', 'yellow', 'blue']
+let sequence = []
+
+function generateRandomSequence() {
+    let color = colors[Math.floor(Math.random() * colors.length)]
+    sequence.push(color)
+    console.log(color)
+}
+
