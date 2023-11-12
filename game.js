@@ -16,6 +16,9 @@ let colors = ['green', 'red', 'yellow', 'blue']
 let sequence = []
 let level = 0
 
+let i = 0
+let clicked = []
+
 // Applying audio for each btn color
 green_btn.addEventListener('click', () => playSound('green'))
 red_btn.addEventListener('click', () => playSound('red'))
@@ -28,36 +31,38 @@ function playSound(color) {
     audio.play()
     applyHighlight(color)
     if(sequence.length === 0) {
-        sequence.push(color)
-        // gameStart()
-        generateRandomSequence()
+        setTimeout(() => {
+            console.log('Game Starts')
+            sequence.push(color)
+            generateRandomSequence()
+        }, 500)
+    }
+    else {
+        clicked.push(color)
+        i += 1
     }
 }
 
-
-function gameStart() {
-    // while(win) {
-    //     if(!checkColor()) {
-    //         win = false
-    //         level = 0
-    //         sequence = []
-    //         break
-    //     }
-    //     else {
-    //         level += 1
-    //         generateRandomSequence()
-    //     }
-    // }
+// function to restart game
+function restart() {
+    i = 0
+    level = 0
+    clicked = []
+    sequence = []
+    level_title.innerText = 'Press Any Key to Start'
 }
 
 // function to generate random sequence and apply level
 function generateRandomSequence() {
-    level += 1
-    level_title.innerText = 'Level ' + level
     let color = colors[Math.floor(Math.random() * colors.length)]
     sequence.push(color)
     console.log(color)
     applySequence()
+    setTimeout(() => {
+        while(clicked.length < sequence.length) {
+            checkColor(clicked[i])
+        }
+    }, 100)
 }
 
 // function to click button automatically
@@ -74,7 +79,6 @@ function applySequence() {
     for(let i=0; i<colors.length; i++) {
         setTimeout(() => {
             playSound(sequence[i])
-            btn.click()
             applyHighlight(sequence[i])
             if (i === colors.length - 1) {
                 level += 1;
@@ -84,17 +88,17 @@ function applySequence() {
 }
 
 function checkColor(color) {
-    for(let i=0; i<sequence.length; i++) {
-        if(color === sequence[i]) {
-            return true
-        
-        }
-        else {
-            alert('Wrong color')
-            audio.src = './sounds/wrong.mp3'
-            audio.play()
-            return false
-        }
-    }   
+    if(color === sequence[i]) {
+        level += 1
+        level_title.innerText = 'Level ' + level
+        generateRandomSequence()
+    }
+
+    else {
+        setTimeout(() => {
+            alert("You lose")
+            restart()
+        }, 500)
+    }
 }
 
