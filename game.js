@@ -23,6 +23,7 @@ blue_btn.addEventListener('click', () => playSound('blue'))
 function playSound(color) {
     audio.src = './sounds/' + color + '.mp3'
     audio.play()
+    applyHighlight(color)
     if(sequence.length === 0) {
         sequence.push(color)
         gameStart()
@@ -53,13 +54,12 @@ function generateRandomSequence() {
 }
 
 // function to click button automatically
-function clickButton(color) {
+function applyHighlight(color) {
     let btn = document.getElementById(color)
     btn.classList.add('pressed')
-    btn.click()
     setTimeout(() => {
         btn.classList.remove('pressed')
-    }, 500)
+    }, 100)
 }
 
 // function to apply random sequence 
@@ -67,7 +67,8 @@ function applySequence() {
     for(let i=0; i<colors.length; i++) {
         setTimeout(() => {
             playSound(sequence[i])
-            clickButton(sequence[i])
+            btn.click()
+            applyHighlight(sequence[i])
             if (i === colors.length - 1) {
                 level += 1;
             }
@@ -83,6 +84,8 @@ function checkColor(color) {
         }
         else {
             alert('Wrong color')
+            audio.src = './sounds/wrong.mp3'
+            audio.play()
             return false
         }
     }   
