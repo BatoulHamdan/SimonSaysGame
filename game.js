@@ -4,6 +4,9 @@ let red_btn = document.getElementById('red')
 let yellow_btn = document.getElementById('yellow')
 let blue_btn = document.getElementById('blue')
 
+// Declaring level title
+let level_title = document.getElementById('level-title')
+
 // Creating audio
 let audio = document.createElement('audio')
 
@@ -26,27 +29,31 @@ function playSound(color) {
     applyHighlight(color)
     if(sequence.length === 0) {
         sequence.push(color)
-        gameStart()
+        // gameStart()
+        generateRandomSequence()
     }
 }
 
-// function to start the game
+
 function gameStart() {
-    while(win) {
-        if(!checkColor()) {
-            win = false
-            level = 0
-            sequence = []
-            break
-        }
-        else {
-            level += 1
-            generateRandomSequence()
-        }
-    }
+    // while(win) {
+    //     if(!checkColor()) {
+    //         win = false
+    //         level = 0
+    //         sequence = []
+    //         break
+    //     }
+    //     else {
+    //         level += 1
+    //         generateRandomSequence()
+    //     }
+    // }
 }
 
+// function to generate random sequence and apply level
 function generateRandomSequence() {
+    level += 1
+    level_title.innerText = 'Level ' + level
     let color = colors[Math.floor(Math.random() * colors.length)]
     sequence.push(color)
     console.log(color)
