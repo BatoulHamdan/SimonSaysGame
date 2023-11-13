@@ -32,9 +32,7 @@ function playSound(color) {
         audio.play()
         applyHighlight(color)
         if(sequence.length === 0) {
-            console.log('Game Starts')
             sequence.push(color)
-            console.log(color)
             setTimeout(() => {
                 nextLevel()
             }, sequence.length*1000)
@@ -69,7 +67,6 @@ function generateRandomSequence() {
     applyingSequence = true
     let color = colors[Math.floor(Math.random() * colors.length)]
     sequence.push(color)
-    console.log(color)
     setTimeout(() => {
         applySequence()
     }, 1000)
