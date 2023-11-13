@@ -57,9 +57,10 @@ function applyHighlight(color) {
 
 // function to restart game
 function restart() {
+    applyingSequence = false
     level = 0
-    clicked = []
-    sequence = []
+    clicked.length = 0
+    sequence.length = 0
     level_title.innerText = 'Press Any Key to Start'
 }
 
@@ -97,7 +98,7 @@ function checkColor() {
             restart()
         }, 100)
     }
-    if (clicked.length === sequence.length) {
+    else if (clicked.length === sequence.length) {
         setTimeout(() => {
             nextLevel()
         }, 100) 
