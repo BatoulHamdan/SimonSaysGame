@@ -16,7 +16,8 @@ let sequence = []
 let level = 0
 
 let clicked = []
-let i = 0
+
+let applyingSequence = false
 
 // Applying audio for each btn color
 green_btn.addEventListener('click', () => playSound('green'))
@@ -26,20 +27,22 @@ blue_btn.addEventListener('click', () => playSound('blue'))
 
 // function to play sound when clicking on button 
 function playSound(color) {
-    audio.src = './sounds/' + color + '.mp3'
-    audio.play()
-    applyHighlight(color)
-    if(sequence.length === 0) {
-        console.log('Game Starts')
-        sequence.push(color)
-        console.log(color)
-        setTimeout(() => {
-            nextLevel()
-        }, sequence.length*1000)
-    }
-    else {
-        clicked.push(color)
-        checkColor()
+    if(applyingSequence === false) {
+        audio.src = './sounds/' + color + '.mp3'
+        audio.play()
+        applyHighlight(color)
+        if(sequence.length === 0) {
+            console.log('Game Starts')
+            sequence.push(color)
+            console.log(color)
+            setTimeout(() => {
+                nextLevel()
+            }, sequence.length*1000)
+        }
+        else {
+            clicked.push(color)
+            checkColor()
+        }
     }
 }
 
@@ -62,6 +65,7 @@ function restart() {
 
 // function to generate random sequence and apply level
 function generateRandomSequence() {
+    applyingSequence = true
     let color = colors[Math.floor(Math.random() * colors.length)]
     sequence.push(color)
     console.log(color)
@@ -77,6 +81,10 @@ function applySequence() {
             audio.src = './sounds/' + sequence[i] + '.mp3'
             audio.play()
             applyHighlight(sequence[i])
+
+            if(i === sequence.length-1) {
+                applyingSequence = false
+            }
         }, i*1000)
     }
 }
@@ -87,12 +95,12 @@ function checkColor() {
         audio.play()
         setTimeout(() => {
             restart()
-        }, 1000)
+        }, 100)
     }
-    if (clicked.length !== sequence.length) {
+    if (clicked.length === sequence.length) {
         setTimeout(() => {
             nextLevel()
-        }, 1000*sequence.length) 
+        }, 100) 
     }
 }
 
@@ -102,5 +110,5 @@ function nextLevel() {
         level += 1
         level_title.innerText = 'Level ' + level
         clicked = []
-    }, 1000*sequence.length)
+    }, 100)
 }
