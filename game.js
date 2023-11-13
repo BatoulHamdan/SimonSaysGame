@@ -11,13 +11,12 @@ let level_title = document.getElementById('level-title')
 let audio = document.createElement('audio')
 
 // Declaring game variables
-let win = true
 let colors = ['green', 'red', 'yellow', 'blue']
 let sequence = []
 let level = 0
 
-let i = 0
 let clicked = []
+let i = 0
 
 // Applying audio for each btn color
 green_btn.addEventListener('click', () => playSound('green'))
@@ -31,38 +30,17 @@ function playSound(color) {
     audio.play()
     applyHighlight(color)
     if(sequence.length === 0) {
+        console.log('Game Starts')
+        sequence.push(color)
+        console.log(color)
         setTimeout(() => {
-            console.log('Game Starts')
-            sequence.push(color)
-            generateRandomSequence()
-        }, 500)
+            nextLevel()
+        }, 1000)
     }
     else {
         clicked.push(color)
-        i += 1
+        checkColor()
     }
-}
-
-// function to restart game
-function restart() {
-    i = 0
-    level = 0
-    clicked = []
-    sequence = []
-    level_title.innerText = 'Press Any Key to Start'
-}
-
-// function to generate random sequence and apply level
-function generateRandomSequence() {
-    let color = colors[Math.floor(Math.random() * colors.length)]
-    sequence.push(color)
-    console.log(color)
-    applySequence()
-    setTimeout(() => {
-        while(clicked.length < sequence.length) {
-            checkColor(clicked[i])
-        }
-    }, 100)
 }
 
 // function to click button automatically
@@ -74,31 +52,53 @@ function applyHighlight(color) {
     }, 100)
 }
 
+// function to restart game
+function restart() {
+    level = 0
+    clicked = []
+    sequence = []
+    level_title.innerText = 'Press Any Key to Start'
+}
+
+// function to generate random sequence and apply level
+function generateRandomSequence() {
+    let color = colors[Math.floor(Math.random() * colors.length)]
+    sequence.push(color)
+    console.log(color)
+    setTimeout(() => {
+        applySequence()
+    }, 1000)
+}
+
 // function to apply random sequence 
 function applySequence() {
-    for(let i=0; i<colors.length; i++) {
+    for(let i=0; i<sequence.length; i++) {
         setTimeout(() => {
-            playSound(sequence[i])
+            audio.src = './sounds/' + sequence[i] + '.mp3'
+            audio.play()
             applyHighlight(sequence[i])
-            if (i === colors.length - 1) {
-                level += 1;
-            }
         }, i*1000)
     }
 }
 
-function checkColor(color) {
-    if(color === sequence[i]) {
-        level += 1
-        level_title.innerText = 'Level ' + level
-        generateRandomSequence()
+function checkColor() {
+    if(clicked[clicked.length - 1] !== sequence[clicked.length - 1]) {
+        alert('You Lose')
+        restart()
     }
-
-    else {
+    if (clicked.length !== sequence.length) {
         setTimeout(() => {
-            alert("You lose")
-            restart()
-        }, 500)
+            nextLevel()
+        }, 1000*sequence.length)
+        
     }
 }
 
+function nextLevel() {
+    setTimeout(() => {
+        generateRandomSequence()
+        level += 1
+        level_title.innerText = 'Level ' + level
+        clicked = []
+    }, 1000*sequence.length)
+}
