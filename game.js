@@ -35,7 +35,7 @@ function playSound(color) {
         console.log(color)
         setTimeout(() => {
             nextLevel()
-        }, 1000)
+        }, sequence.length*1000)
     }
     else {
         clicked.push(color)
@@ -83,14 +83,16 @@ function applySequence() {
 
 function checkColor() {
     if(clicked[clicked.length - 1] !== sequence[clicked.length - 1]) {
-        alert('You Lose')
-        restart()
+        audio.src = './sounds/wrong.mp3'
+        audio.play()
+        setTimeout(() => {
+            restart()
+        }, 1000)
     }
     if (clicked.length !== sequence.length) {
         setTimeout(() => {
             nextLevel()
-        }, 1000*sequence.length)
-        
+        }, 1000*sequence.length) 
     }
 }
 
