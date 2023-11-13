@@ -53,6 +53,15 @@ function applyHighlight(color) {
     }, 100)
 }
 
+// function to apply red background
+function applyRedBackground() {
+    let container = document.body
+    container.classList.add('game-over')
+    setTimeout(() => {
+        container.classList.remove('game-over')
+    }, 1000)
+}
+
 // function to restart game
 function restart() {
     applyingSequence = false
@@ -91,6 +100,7 @@ function checkColor() {
     if(clicked[clicked.length - 1] !== sequence[clicked.length - 1]) {
         audio.src = './sounds/wrong.mp3'
         audio.play()
+        applyRedBackground()
         setTimeout(() => {
             restart()
         }, 100)
